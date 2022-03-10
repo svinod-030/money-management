@@ -1,31 +1,31 @@
 import React from 'react'
 import styled from 'styled-components'
-import {usePagination, useTable} from 'react-table'
+import { usePagination, useTable } from 'react-table'
+import { Button, Stack } from '@mui/material'
+import Report from '../report/Report'
 
 const makeData = () => {
   return [{
-    firstName: 'Vinod',
-    lastName: 'Sigadana',
-    lendingAmount: '100000',
-    lendingDate: '2022/01/22',
-    billAmount: '',
-    billDate: '',
-    interest: INTEREST_RATE,
-    margin: 0,
-    remaining: ''
+    farmerName: 'SRI ANJANI GUNNY TRADERS',
+    agentName: 'K SUDHEER',
+    companyName: 'MUNNANGI',
+    transactionAmount: '3222824',
+    invoiceDate: '2022/01/01',
+    settlementAmount: '3499767',
+    settlementDate: '2022/01/20',
+    interest: INTEREST_RATE_PER_1L_PER_DAY
   }]
 }
-const INTEREST_RATE = 1;
+export const INTEREST_RATE_PER_1L_PER_DAY = 100;
 const EMPTY_ROW_DATA = {
-  firstName: '',
-  lastName: '',
-  lendingAmount: '',
-  lendingDate: '',
-  billAmount: '',
-  billDate: '',
-  interest: INTEREST_RATE,
-  margin: 0,
-  remaining: ''
+  farmerName: '',
+  agentName: '',
+  companyName: '',
+  transactionAmount: '',
+  invoiceDate: '',
+  settlementAmount: '',
+  settlementDate: '',
+  interest: INTEREST_RATE_PER_1L_PER_DAY
 }
 
 const Styles = styled.div`
@@ -34,6 +34,8 @@ const Styles = styled.div`
   table {
     border-spacing: 0;
     border: 1px solid black;
+    width: 100%;
+    margin-bottom: 10px;
 
     tr {
       :last-child {
@@ -68,14 +70,12 @@ const Styles = styled.div`
   }
 `
 
-// Create an editable cell renderer
 const EditableCell = ({
                         value: initialValue,
                         row: { index },
                         column: { id },
-                        updateMyData, // This is a custom function that we supplied to our table instance
+                        updateMyData,
                       }) => {
-  // We need to keep and update the state of the cell normally
   const [value, setValue] = React.useState(initialValue)
 
   const onChange = e => {
@@ -87,7 +87,6 @@ const EditableCell = ({
     updateMyData(index, id, value)
   }
 
-  // If the initialValue is changed external, sync it up with our state
   React.useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
@@ -95,16 +94,11 @@ const EditableCell = ({
   return <input value={value} onChange={onChange} onBlur={onBlur} />
 }
 
-// Set our editable cell renderer as the default Cell renderer
 const defaultColumn = {
   Cell: EditableCell,
 }
 
-// Be sure to pass our updateMyData and the skipPageReset option
 function Table({ columns, data, updateMyData, skipPageReset }) {
-  // For this example, we're using pagination to illustrate how to stop
-  // the current page from resetting when our data changes
-  // Otherwise, nothing is different here.
   const {
     getTableProps,
     getTableBodyProps,
@@ -125,19 +119,12 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
       columns,
       data,
       defaultColumn,
-      // use the skipPageReset option to disable page resetting temporarily
       autoResetPage: !skipPageReset,
-      // updateMyData isn't part of the API, but
-      // anything we put into these options will
-      // automatically be available on the instance.
-      // That way we can call this function from our
-      // cell renderer!
       updateMyData,
     },
     usePagination
   )
 
-  // Render the UI for your table
   return (
     <>
       <table {...getTableProps()}>
@@ -163,50 +150,50 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
         })}
         </tbody>
       </table>
-      <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {'<<'}
-        </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
-        </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
-        </button>{' '}
-        <span>
-          Page{' '}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
-        </span>
-        <span>
-          | Go to page:{' '}
-          <input
-            type="number"
-            defaultValue={pageIndex + 1}
-            onChange={e => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0
-              gotoPage(page)
-            }}
-            style={{ width: '100px' }}
-          />
-        </span>{' '}
-        <select
-          value={pageSize}
-          onChange={e => {
-            setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/*<div className="pagination">*/}
+      {/*  <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>*/}
+      {/*    {'<<'}*/}
+      {/*  </button>{' '}*/}
+      {/*  <button onClick={() => previousPage()} disabled={!canPreviousPage}>*/}
+      {/*    {'<'}*/}
+      {/*  </button>{' '}*/}
+      {/*  <button onClick={() => nextPage()} disabled={!canNextPage}>*/}
+      {/*    {'>'}*/}
+      {/*  </button>{' '}*/}
+      {/*  <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>*/}
+      {/*    {'>>'}*/}
+      {/*  </button>{' '}*/}
+      {/*  <span>*/}
+      {/*    Page{' '}*/}
+      {/*    <strong>*/}
+      {/*      {pageIndex + 1} of {pageOptions.length}*/}
+      {/*    </strong>{' '}*/}
+      {/*  </span>*/}
+      {/*  <span>*/}
+      {/*    | Go to page:{' '}*/}
+      {/*    <input*/}
+      {/*      type="number"*/}
+      {/*      defaultValue={pageIndex + 1}*/}
+      {/*      onChange={e => {*/}
+      {/*        const page = e.target.value ? Number(e.target.value) - 1 : 0*/}
+      {/*        gotoPage(page)*/}
+      {/*      }}*/}
+      {/*      style={{ width: '100px' }}*/}
+      {/*    />*/}
+      {/*  </span>{' '}*/}
+      {/*  <select*/}
+      {/*    value={pageSize}*/}
+      {/*    onChange={e => {*/}
+      {/*      setPageSize(Number(e.target.value))*/}
+      {/*    }}*/}
+      {/*  >*/}
+      {/*    {[10, 20, 30, 40, 50].map(pageSize => (*/}
+      {/*      <option key={pageSize} value={pageSize}>*/}
+      {/*        Show {pageSize}*/}
+      {/*      </option>*/}
+      {/*    ))}*/}
+      {/*  </select>*/}
+      {/*</div>*/}
     </>
   )
 }
@@ -215,64 +202,58 @@ function Grid() {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'General Details',
         columns: [
           {
-            Header: 'First Name',
-            accessor: 'firstName',
+            Header: 'Farmer Name',
+            accessor: 'farmerName',
           },
           {
-            Header: 'Last Name',
-            accessor: 'lastName',
+            Header: 'Agent Name',
+            accessor: 'agentName',
+          },
+          {
+            Header: 'Company Name',
+            accessor: 'companyName',
           },
         ],
       },
       {
-        Header: 'Lending Info',
+        Header: 'Transaction Details',
         columns: [
           {
-            Header: 'Amount',
-            accessor: 'lendingAmount',
+            Header: 'Transaction Amount',
+            accessor: 'transactionAmount',
           },
           {
-            Header: 'Date',
-            accessor: 'lendingDate',
+            Header: 'Invoice Date',
+            accessor: 'invoiceDate',
             // Cell: ({ value }) => value ? new Date(value).toDateString() : 'N.A'
           },
         ],
       },
       {
-        Header: 'Bill Info',
+        Header: 'Bill Details',
         columns: [
           {
-            Header: 'Amount',
-            accessor: 'billAmount',
+            Header: 'Settlement Amount',
+            accessor: 'settlementAmount',
           },
           {
             Header: 'Date',
-            accessor: 'billDate',
+            accessor: 'settlementDate',
             // Cell: ({ value }) => value ? new Date(value).toDateString() : 'N.A'
           },
         ],
       },
       {
-        Header: 'Result',
+        Header: 'Interest',
         columns: [
           {
-            Header: 'Interest (Rs/1000/Day)',
+            Header: 'Rs/1 Lakh/Day',
             accessor: 'interest',
-            Cell: ({ value }) => String(value)
-          },
-          {
-            Header: 'Profit',
-            accessor: 'margin',
-            Cell: ({ value }) => String(value)
-          },
-          {
-            Header: 'Remaining Amount',
-            accessor: 'remaining',
-            Cell: ({ value }) => String(value)
-          },
+            // Cell: ({ value }) => String(value)
+          }
         ],
       },
     ],
@@ -282,15 +263,9 @@ function Grid() {
   const [data, setData] = React.useState(() => makeData(20))
   const [originalData] = React.useState(data)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
+  const [showReport, setShowReport] = React.useState(true)
 
-  // We need to keep the table from resetting the pageIndex when we
-  // Update data. So we can keep track of that flag with a ref.
-
-  // When our cell renderer calls updateMyData, we'll use
-  // the rowIndex, columnId and new value to update the
-  // original data
   const updateMyData = (rowIndex, columnId, value) => {
-    // We also turn on the flag to not reset the page
     setSkipPageReset(true)
     setData(old =>
       old.map((row, index) => {
@@ -308,46 +283,46 @@ function Grid() {
   }
 
   const getMargin = (row) => {
-    if (row.lendingDate && row.billDate && row.lendingAmount) {
-      const startDate = new Date(row.lendingDate)
-      const endingDate = new Date(row.billDate)
-      const lendingAmount = row.lendingAmount
+    if (row.invoiceDate && row.settlementDate && row.transactionAmount) {
+      const startDate = new Date(row.invoiceDate)
+      const endingDate = new Date(row.settlementDate)
+      const transactionAmount = row.transactionAmount
       const timeDiffInDays = (endingDate - startDate) / (1000 * 3600 * 24)
-      return timeDiffInDays * INTEREST_RATE * (lendingAmount / 1000);
+      return timeDiffInDays * INTEREST_RATE_PER_1L_PER_DAY * transactionAmount / 100000;
     }
     return 0
   }
 
   const getRemaining = (row) => {
     const margin = getMargin(row);
-    if (row.billAmount && margin > 0) {
-      return row.billAmount - margin
+    if (row.settlementAmount && margin > 0) {
+      return row.settlementAmount - margin
     }
     return ''
   }
 
-  // After data chagnes, we turn the flag back off
-  // so that if data actually changes when we're not
-  // editing it, the page is reset
   React.useEffect(() => {
     setSkipPageReset(false)
   }, [data])
 
-  // Let's add a data resetter/randomizer to help
-  // illustrate that flow...
   const resetData = () => setData(originalData)
   const addRow = () => setData([...data, EMPTY_ROW_DATA])
+  const generateReport = () => setShowReport(!showReport)
 
   return (
     <Styles>
-      <button onClick={resetData}>Reset Data</button>
-      <button onClick={addRow}>Add Row</button>
       <Table
         columns={columns}
         data={data}
         updateMyData={updateMyData}
         skipPageReset={skipPageReset}
       />
+      <Stack direction="row" spacing={2} justifyContent={'flex-end'}>
+        <Button variant="outlined" onClick={resetData}>Reset Data</Button>
+        <Button variant="outlined" onClick={addRow}>Add Row</Button>
+        <Button variant="outlined" onClick={generateReport}>{!showReport ? 'Show': 'Hide'} Report</Button>
+      </Stack>
+      {showReport && <Report data={data}/>}
     </Styles>
   )
 }
