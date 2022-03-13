@@ -4,13 +4,17 @@ import { usePagination, useTable } from 'react-table'
 import { Button, Stack } from '@mui/material'
 import Report from '../report/Report'
 
-const makeData = () => {
+const makeTransactions = () => {
   return [{
     farmerName: 'SRI ANJANI GUNNY TRADERS',
     agentName: 'K SUDHEER',
     companyName: 'MUNNANGI',
     transactionAmount: '3222824',
-    invoiceDate: '2022/01/01',
+    invoiceDate: '2022/01/01'
+  }]
+}
+const makeBills = () => {
+  return [{
     settlementAmount: '3499767',
     settlementDate: '2022/01/20',
     interest: INTEREST_RATE_PER_1L_PER_DAY
@@ -104,16 +108,7 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize },
+    page
   } = useTable(
     {
       columns,
@@ -150,56 +145,12 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
         })}
         </tbody>
       </table>
-      {/*<div className="pagination">*/}
-      {/*  <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>*/}
-      {/*    {'<<'}*/}
-      {/*  </button>{' '}*/}
-      {/*  <button onClick={() => previousPage()} disabled={!canPreviousPage}>*/}
-      {/*    {'<'}*/}
-      {/*  </button>{' '}*/}
-      {/*  <button onClick={() => nextPage()} disabled={!canNextPage}>*/}
-      {/*    {'>'}*/}
-      {/*  </button>{' '}*/}
-      {/*  <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>*/}
-      {/*    {'>>'}*/}
-      {/*  </button>{' '}*/}
-      {/*  <span>*/}
-      {/*    Page{' '}*/}
-      {/*    <strong>*/}
-      {/*      {pageIndex + 1} of {pageOptions.length}*/}
-      {/*    </strong>{' '}*/}
-      {/*  </span>*/}
-      {/*  <span>*/}
-      {/*    | Go to page:{' '}*/}
-      {/*    <input*/}
-      {/*      type="number"*/}
-      {/*      defaultValue={pageIndex + 1}*/}
-      {/*      onChange={e => {*/}
-      {/*        const page = e.target.value ? Number(e.target.value) - 1 : 0*/}
-      {/*        gotoPage(page)*/}
-      {/*      }}*/}
-      {/*      style={{ width: '100px' }}*/}
-      {/*    />*/}
-      {/*  </span>{' '}*/}
-      {/*  <select*/}
-      {/*    value={pageSize}*/}
-      {/*    onChange={e => {*/}
-      {/*      setPageSize(Number(e.target.value))*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    {[10, 20, 30, 40, 50].map(pageSize => (*/}
-      {/*      <option key={pageSize} value={pageSize}>*/}
-      {/*        Show {pageSize}*/}
-      {/*      </option>*/}
-      {/*    ))}*/}
-      {/*  </select>*/}
-      {/*</div>*/}
     </>
   )
 }
 
 function Grid() {
-  const columns = React.useMemo(
+  const transactionColumns = React.useMemo(
     () => [
       {
         Header: 'General Details',
@@ -232,6 +183,11 @@ function Grid() {
           },
         ],
       },
+    ],
+    []
+  )
+  const billColumns = React.useMemo(
+    () => [
       {
         Header: 'Bill Details',
         columns: [
@@ -260,14 +216,30 @@ function Grid() {
     []
   )
 
-  const [data, setData] = React.useState(() => makeData(20))
-  const [originalData] = React.useState(data)
+  const [transactions, setTransactions] = React.useState(() => makeTransactions(20))
+  const [bills, setBills] = React.useState(() => makeBills(20))
+  const [originalTransactions] = React.useState(transactions)
+  const [originalBills] = React.useState(bills)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
   const [showReport, setShowReport] = React.useState(true)
+  const [reportData, setReportData] = React.useState([])
 
   const updateMyData = (rowIndex, columnId, value) => {
     setSkipPageReset(true)
-    setData(old =>
+    setTransactions(old =>
+      old.map((row, index) => {
+        if (index === rowIndex) {
+          return {
+            ...old[rowIndex],
+            [columnId]: value,
+            margin: getMargin(row),
+            remaining: getRemaining(row)
+          }
+        }
+        return row
+      })
+    )
+    setBills(old =>
       old.map((row, index) => {
         if (index === rowIndex) {
           return {
@@ -303,26 +275,47 @@ function Grid() {
 
   React.useEffect(() => {
     setSkipPageReset(false)
-  }, [data])
+  }, [transactions])
 
-  const resetData = () => setData(originalData)
-  const addRow = () => setData([...data, EMPTY_ROW_DATA])
-  const generateReport = () => setShowReport(!showReport)
+  const resetTransactions = () => setTransactions(originalTransactions)
+  const resetBills = () => setBills(originalBills)
+  const addTransaction = () => setTransactions([...transactions, EMPTY_ROW_DATA])
+  const addBill = () => setBills([...bills, EMPTY_ROW_DATA])
+  const generateReport = () => {
+    setReportData([])
+    setShowReport(!showReport)
+  }
 
   return (
     <Styles>
-      <Table
-        columns={columns}
-        data={data}
-        updateMyData={updateMyData}
-        skipPageReset={skipPageReset}
-      />
-      <Stack direction="row" spacing={2} justifyContent={'flex-end'}>
-        <Button variant="outlined" onClick={resetData}>Reset Data</Button>
-        <Button variant="outlined" onClick={addRow}>Add Row</Button>
-        <Button variant="outlined" onClick={generateReport}>{!showReport ? 'Show': 'Hide'} Report</Button>
+      <Stack direction="row" justifyContent={'center'}>
+        <Table
+          columns={transactionColumns}
+          data={transactions}
+          updateMyData={updateMyData}
+          skipPageReset={skipPageReset}
+        />
+        <Table
+          columns={billColumns}
+          data={bills}
+          updateMyData={updateMyData}
+          skipPageReset={skipPageReset}
+        />
       </Stack>
-      {showReport && <Report data={data}/>}
+      <Stack direction="row" spacing={2} justifyContent={'center'}>
+        <Stack direction="row" justifyContent={'center'}>
+          <Button variant="outlined" onClick={addTransaction}>Add Transaction</Button>
+          <Button variant="outlined" onClick={resetTransactions}>Reset Transactions</Button>
+        </Stack>
+        <Stack direction="row" justifyContent={'center'}>
+          <Button variant="outlined" onClick={addBill}>Add Bill</Button>
+          <Button variant="outlined" onClick={resetBills}>Reset Bills</Button>
+        </Stack>
+        <Stack direction="row" justifyContent={'center'}>
+          <Button variant="contained" onClick={generateReport}>Generate Report</Button>
+        </Stack>
+      </Stack>
+      {showReport && <Report data={reportData}/>}
     </Styles>
   )
 }

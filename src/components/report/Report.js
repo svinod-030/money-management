@@ -25,7 +25,7 @@ function calculateInterest(row) {
 }
 export default function Report({ data }) {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style={{ marginTop: '10px'}}>
       <Table sx={{ maxWidth: 650 }} aria-label="caption table">
         <TableHead>
           <TableRow>
