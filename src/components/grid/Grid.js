@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { usePagination, useTable } from 'react-table'
 import { Button, Stack } from '@mui/material'
 import Report from '../report/Report'
-import lot from '../../data/lot-2.json'
+import lot from '../../data/lot-1.json'
 
 const makeTransactions = () => {
   return lot.transactions
@@ -277,34 +277,37 @@ function Grid() {
 
   return (
     <Styles>
-      <Stack direction="row" justifyContent={'center'}>
-        <Table
-          columns={transactionColumns}
-          data={transactions}
-          updateMyData={updateMyData}
-          skipPageReset={skipPageReset}
-        />
-        <Table
-          columns={billColumns}
-          data={bills}
-          updateMyData={updateMyData}
-          skipPageReset={skipPageReset}
-        />
-      </Stack>
-      <Stack direction="row" spacing={3} justifyContent={'center'}>
+      {showReport ? <Report transactions={transactions} bills={bills} setShowReport={setShowReport}/> :
+      <div>
         <Stack direction="row" justifyContent={'center'}>
-          <Button variant="outlined" onClick={addTransaction}>Add Transaction</Button>
-          <Button variant="outlined" onClick={resetTransactions}>Reset Transactions</Button>
+          <Table
+            columns={transactionColumns}
+            data={transactions}
+            updateMyData={updateMyData}
+            skipPageReset={skipPageReset}
+          />
+          <Table
+            columns={billColumns}
+            data={bills}
+            updateMyData={updateMyData}
+            skipPageReset={skipPageReset}
+          />
         </Stack>
-        <Stack direction="row" justifyContent={'center'}>
-          <Button variant="outlined" onClick={addBill}>Add Bill</Button>
-          <Button variant="outlined" onClick={resetBills}>Reset Bills</Button>
+        <Stack direction="row" spacing={3} justifyContent={'center'}>
+          <Stack direction="row" justifyContent={'center'}>
+            <Button variant="outlined" onClick={addTransaction}>Add Transaction</Button>
+            <Button variant="outlined" onClick={resetTransactions}>Reset Transactions</Button>
+          </Stack>
+          <Stack direction="row" justifyContent={'center'}>
+            <Button variant="outlined" onClick={addBill}>Add Bill</Button>
+            <Button variant="outlined" onClick={resetBills}>Reset Bills</Button>
+          </Stack>
+          <Stack direction="row" justifyContent={'center'}>
+            <Button variant="contained" onClick={generateReport}>Generate Report</Button>
+          </Stack>
         </Stack>
-        <Stack direction="row" justifyContent={'center'}>
-          <Button variant="contained" onClick={generateReport}>Generate Report</Button>
-        </Stack>
-      </Stack>
-      {showReport && <Report transactions={transactions} bills={bills}/>}
+      </div>
+      }
     </Styles>
   )
 }
