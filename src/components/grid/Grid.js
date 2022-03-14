@@ -6,18 +6,62 @@ import Report from '../report/Report'
 
 const makeTransactions = () => {
   return [{
-    farmerName: 'SRI ANJANI GUNNY TRADERS',
+    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
     agentName: 'K SUDHEER',
     companyName: 'MUNNANGI',
-    transactionAmount: '3222824',
-    invoiceDate: '2022/01/01'
+    transactionAmount: 3049793,
+    invoiceDate: '2022/01/07'
+  },{
+    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
+    agentName: 'K SUDHEER',
+    companyName: 'MUNNANGI',
+    transactionAmount: 1534075,
+    invoiceDate: '2022/01/07'
+  },{
+    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
+    agentName: 'K SUDHEER',
+    companyName: 'MUNNANGI',
+    transactionAmount: 1116786,
+    invoiceDate: '2022/01/08'
+  },{
+    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
+    agentName: 'K SUDHEER',
+    companyName: 'MUNNANGI',
+    transactionAmount: 1873131,
+    invoiceDate: '2022/01/08'
+  },{
+    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
+    agentName: 'K SUDHEER',
+    companyName: 'MUNNANGI',
+    transactionAmount: 800000,
+    invoiceDate: '2022/01/08'
+  },{
+    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
+    agentName: 'K SUDHEER',
+    companyName: 'MUNNANGI',
+    transactionAmount: 184400,
+    invoiceDate: '2022/02/03'
+  },{
+    farmerName: 'SRI ANJANI GUNNY TRADERS - 2',
+    agentName: 'K SUDHEER',
+    companyName: 'MUNNANGI',
+    transactionAmount: 198650,
+    invoiceDate: '2022/02/03'
   }]
 }
 const makeBills = () => {
   return [{
-    settlementAmount: '3499767',
-    settlementDate: '2022/01/20',
-    interest: INTEREST_RATE_PER_1L_PER_DAY
+    settlementAmount: 2374309,
+    settlementDate: '2022/02/05',
+    interestRate: INTEREST_RATE_PER_1L_PER_DAY
+  }, {
+    settlementAmount: 1275632,
+    settlementDate: '2022/02/05',
+    interestRate: INTEREST_RATE_PER_1L_PER_DAY
+  }, {
+    settlementAmount: 99455,
+    settlementDate: '2022/02/05',
+    interestRate: INTEREST_RATE_PER_1L_PER_DAY
   }]
 }
 export const INTEREST_RATE_PER_1L_PER_DAY = 100;
@@ -29,7 +73,7 @@ const EMPTY_ROW_DATA = {
   invoiceDate: '',
   settlementAmount: '',
   settlementDate: '',
-  interest: INTEREST_RATE_PER_1L_PER_DAY
+  interestRate: INTEREST_RATE_PER_1L_PER_DAY
 }
 
 const Styles = styled.div`
@@ -207,7 +251,7 @@ function Grid() {
         columns: [
           {
             Header: 'Rs/1 Lakh/Day',
-            accessor: 'interest',
+            accessor: 'interestRate',
             // Cell: ({ value }) => String(value)
           }
         ],
@@ -221,8 +265,7 @@ function Grid() {
   const [originalTransactions] = React.useState(transactions)
   const [originalBills] = React.useState(bills)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
-  const [showReport, setShowReport] = React.useState(true)
-  const [reportData, setReportData] = React.useState([])
+  const [showReport, setShowReport] = React.useState(false)
 
   const updateMyData = (rowIndex, columnId, value) => {
     setSkipPageReset(true)
@@ -279,11 +322,10 @@ function Grid() {
 
   const resetTransactions = () => setTransactions(originalTransactions)
   const resetBills = () => setBills(originalBills)
-  const addTransaction = () => setTransactions([...transactions, EMPTY_ROW_DATA])
-  const addBill = () => setBills([...bills, EMPTY_ROW_DATA])
+  const addTransaction = (transaction) => transaction ? setTransactions([...transactions, transaction]) : setTransactions([...transactions, EMPTY_ROW_DATA])
+  const addBill = (bill) => bill ? setBills([...bills, bill]) : setBills([...bills, EMPTY_ROW_DATA])
   const generateReport = () => {
-    setReportData([])
-    setShowReport(!showReport)
+    setShowReport(true)
   }
 
   return (
@@ -302,7 +344,7 @@ function Grid() {
           skipPageReset={skipPageReset}
         />
       </Stack>
-      <Stack direction="row" spacing={2} justifyContent={'center'}>
+      <Stack direction="row" spacing={3} justifyContent={'center'}>
         <Stack direction="row" justifyContent={'center'}>
           <Button variant="outlined" onClick={addTransaction}>Add Transaction</Button>
           <Button variant="outlined" onClick={resetTransactions}>Reset Transactions</Button>
@@ -315,7 +357,7 @@ function Grid() {
           <Button variant="contained" onClick={generateReport}>Generate Report</Button>
         </Stack>
       </Stack>
-      {showReport && <Report data={reportData}/>}
+      {showReport && <Report transactions={transactions} bills={bills}/>}
     </Styles>
   )
 }
