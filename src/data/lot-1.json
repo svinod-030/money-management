@@ -1,0 +1,58 @@
+{
+  "transactions": [{
+    "farmerName": "SRI ANJANI GUNNY TRADERS - 1",
+    "agentName": "K SUDHEER",
+    "companyName": "MUNNANGI",
+    "transactionAmount": 3049793,
+    "invoiceDate": "2022/01/07"
+  },{
+    "farmerName": "SRI ANJANI GUNNY TRADERS - 2",
+    "agentName": "K SUDHEER",
+    "companyName": "MUNNANGI",
+    "transactionAmount": 1534075,
+    "invoiceDate": "2022/01/07"
+  },{
+    "farmerName": "SRI ANJANI GUNNY TRADERS - 3",
+    "agentName": "K SUDHEER",
+    "companyName": "MUNNANGI",
+    "transactionAmount": 1116786,
+    "invoiceDate": "2022/01/08"
+  },{
+    "farmerName": "SRI ANJANI GUNNY TRADERS - 4",
+    "agentName": "K SUDHEER",
+    "companyName": "MUNNANGI",
+    "transactionAmount": 1873131,
+    "invoiceDate": "2022/01/08"
+  },{
+    "farmerName": "SRI ANJANI GUNNY TRADERS - 5",
+    "agentName": "K SUDHEER",
+    "companyName": "MUNNANGI",
+    "transactionAmount": 800000,
+    "invoiceDate": "2022/01/08"
+  },{
+    "farmerName": "SRI ANJANI GUNNY TRADERS - 6",
+    "agentName": "K SUDHEER",
+    "companyName": "MUNNANGI",
+    "transactionAmount": 184400,
+    "invoiceDate": "2022/02/03"
+  },{
+    "farmerName": "SRI ANJANI GUNNY TRADERS - 7",
+    "agentName": "K SUDHEER",
+    "companyName": "MUNNANGI",
+    "transactionAmount": 198650,
+    "invoiceDate": "2022/02/03"
+  }],
+  "bills": [{
+    "settlementAmount": 2374309,
+    "settlementDate": "2022/02/05",
+    "interestRate": 100
+  }, {
+    "settlementAmount": 1275632,
+    "settlementDate": "2022/02/05",
+    "interestRate": 100
+  }, {
+    "settlementAmount": 99455,
+    "settlementDate": "2022/02/05",
+    "interestRate": 100
+  }]
+}

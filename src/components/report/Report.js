@@ -26,6 +26,7 @@ export default function Report({ transactions, bills }) {
   const [state, setState] = React.useState({transactions, bills})
   const [completedTransactions, setCompletedTransactions] = React.useState([])
   const tempTransactions = []
+
   function processTransaction(transaction) {
     if(transaction.transactionAmount <= 0) return
     bills.forEach(bill => {
@@ -47,6 +48,7 @@ export default function Report({ transactions, bills }) {
         clearedTransactionAmount: completedTransactionAmount,
         remainingTransactionAmount: transaction.transactionAmount,
         settlementAmount: completedBillAmount,
+        remainingSettlementAmount: bill.settlementAmount,
         invoiceDate: transaction.invoiceDate,
         settlementDate: bill.settlementDate,
         daysIncurred: getTimeDiffInDays(transaction.invoiceDate, bill.settlementDate),
@@ -75,9 +77,10 @@ export default function Report({ transactions, bills }) {
             <TableCell><b>Remaining</b></TableCell>
             <TableCell><b>Invoice Date</b></TableCell>
             <TableCell><b>Bill Amount</b></TableCell>
+            <TableCell><b>Remaining</b></TableCell>
             <TableCell><b>Bill Date</b></TableCell>
             <TableCell><b>Number of Days</b></TableCell>
-            <TableCell><b>Interest Rate (Rs/1 Lakh/Day)</b></TableCell>
+            <TableCell><b>Interest Rate <br/> (Rs/1 Lakh/Day)</b></TableCell>
             <TableCell><b>Interest</b></TableCell>
           </TableRow>
         </TableHead>
@@ -90,6 +93,7 @@ export default function Report({ transactions, bills }) {
               <TableCell component="th" scope="row">{row.remainingTransactionAmount}</TableCell>
               <TableCell component="th" scope="row">{row.invoiceDate}</TableCell>
               <TableCell component="th" scope="row">{row.settlementAmount}</TableCell>
+              <TableCell component="th" scope="row">{row.remainingSettlementAmount}</TableCell>
               <TableCell component="th" scope="row">{row.settlementDate}</TableCell>
               <TableCell component="th" scope="row">{row.daysIncurred}</TableCell>
               <TableCell component="th" scope="row">{INTEREST_RATE_PER_1L_PER_DAY}</TableCell>

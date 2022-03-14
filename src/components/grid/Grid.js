@@ -3,66 +3,13 @@ import styled from 'styled-components'
 import { usePagination, useTable } from 'react-table'
 import { Button, Stack } from '@mui/material'
 import Report from '../report/Report'
+import lot from '../../data/lot-2.json'
 
 const makeTransactions = () => {
-  return [{
-    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
-    agentName: 'K SUDHEER',
-    companyName: 'MUNNANGI',
-    transactionAmount: 3049793,
-    invoiceDate: '2022/01/07'
-  },{
-    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
-    agentName: 'K SUDHEER',
-    companyName: 'MUNNANGI',
-    transactionAmount: 1534075,
-    invoiceDate: '2022/01/07'
-  },{
-    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
-    agentName: 'K SUDHEER',
-    companyName: 'MUNNANGI',
-    transactionAmount: 1116786,
-    invoiceDate: '2022/01/08'
-  },{
-    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
-    agentName: 'K SUDHEER',
-    companyName: 'MUNNANGI',
-    transactionAmount: 1873131,
-    invoiceDate: '2022/01/08'
-  },{
-    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
-    agentName: 'K SUDHEER',
-    companyName: 'MUNNANGI',
-    transactionAmount: 800000,
-    invoiceDate: '2022/01/08'
-  },{
-    farmerName: 'SRI ANJANI GUNNY TRADERS - 1',
-    agentName: 'K SUDHEER',
-    companyName: 'MUNNANGI',
-    transactionAmount: 184400,
-    invoiceDate: '2022/02/03'
-  },{
-    farmerName: 'SRI ANJANI GUNNY TRADERS - 2',
-    agentName: 'K SUDHEER',
-    companyName: 'MUNNANGI',
-    transactionAmount: 198650,
-    invoiceDate: '2022/02/03'
-  }]
+  return lot.transactions
 }
 const makeBills = () => {
-  return [{
-    settlementAmount: 2374309,
-    settlementDate: '2022/02/05',
-    interestRate: INTEREST_RATE_PER_1L_PER_DAY
-  }, {
-    settlementAmount: 1275632,
-    settlementDate: '2022/02/05',
-    interestRate: INTEREST_RATE_PER_1L_PER_DAY
-  }, {
-    settlementAmount: 99455,
-    settlementDate: '2022/02/05',
-    interestRate: INTEREST_RATE_PER_1L_PER_DAY
-  }]
+  return lot.bills
 }
 export const INTEREST_RATE_PER_1L_PER_DAY = 100;
 const EMPTY_ROW_DATA = {
