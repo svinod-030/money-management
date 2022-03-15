@@ -235,8 +235,6 @@ function Grid() {
           return {
             ...old[rowIndex],
             [columnId]: value,
-            margin: getMargin(row),
-            remaining: getRemaining(row)
           }
         }
         return row
@@ -265,7 +263,8 @@ function Grid() {
 
   React.useEffect(() => {
     setSkipPageReset(false)
-  }, [transactions])
+    console.log('updated...')
+  }, [transactions, bills])
 
   const resetTransactions = () => setTransactions(originalTransactions)
   const resetBills = () => setBills(originalBills)

@@ -25,12 +25,14 @@ function calculateInterest(amount, fromDate, toDate) {
 }
 export default function Report({ transactions, bills, setShowReport }) {
 
-  const [state, setState] = React.useState({transactions, bills})
-  const originalData = {transactions, bills}
   const [completedTransactions, setCompletedTransactions] = React.useState([])
   const tempTransactions = []
   let colorCode = 1
   const globalColorStore = [teal, orange, lime]
+  const [state] = React.useState({
+    bills: bills.map(bill => ({...bill})),
+    transactions: transactions.map(transaction => ({...transaction})),
+  })
 
   function processTransaction(transaction) {
     if(transaction.transactionAmount <= 0) return
@@ -82,10 +84,8 @@ export default function Report({ transactions, bills, setShowReport }) {
   }
 
   const resetReport = () => {
-    setState({})
     setCompletedTransactions([])
     setShowReport(false)
-    window.location.reload(false)
   }
   return (
     <div>
