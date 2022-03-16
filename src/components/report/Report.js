@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {INTEREST_RATE_PER_1L_PER_DAY} from "../grid/Grid";
 import {orange, teal, lime} from '@mui/material/colors'
-import {Button} from "@mui/material";
+import {Button, Card, Divider, Stack} from "@mui/material";
 
 function getTimeDiffInDays(fromDate, toDate) {
   if(fromDate && toDate) {
@@ -28,6 +28,7 @@ export default function Report({ transactions, bills, setShowReport }) {
   const [completedTransactions, setCompletedTransactions] = React.useState([])
   const tempTransactions = []
   let colorCode = 1
+  let cumulativeInterest = 0
   const globalColorStore = [teal, orange, lime]
   const [state] = React.useState({
     bills: bills.map(bill => ({...bill})),
@@ -35,7 +36,10 @@ export default function Report({ transactions, bills, setShowReport }) {
   })
 
   function processTransaction(transaction) {
-    if(transaction.transactionAmount <= 0) return
+    if(transaction.transactionAmount <= 0) {
+      cumulativeInterest = 0
+      return
+    }
     state.bills.forEach(bill => {
       if(bill.settlementAmount <= 0 || transaction.transactionAmount <= 0) return
       let originalTransactionAmount = transaction.transactionAmount
@@ -49,6 +53,8 @@ export default function Report({ transactions, bills, setShowReport }) {
         completedTransactionAmount = bill.settlementAmount
         bill.settlementAmount = 0
       }
+      const incurredInterest = calculateInterest(completedTransactionAmount, transaction.invoiceDate, bill.settlementDate)
+      cumulativeInterest += incurredInterest
       tempTransactions.push({
         id: Math.random(),
         transactionAmount: originalTransactionAmount,
@@ -59,7 +65,8 @@ export default function Report({ transactions, bills, setShowReport }) {
         invoiceDate: transaction.invoiceDate,
         settlementDate: bill.settlementDate,
         daysIncurred: getTimeDiffInDays(transaction.invoiceDate, bill.settlementDate),
-        interest: calculateInterest(completedTransactionAmount, transaction.invoiceDate, bill.settlementDate),
+        interest: incurredInterest,
+        cumulativeInterest,
       })
       processTransaction(transaction)
     })
@@ -87,9 +94,58 @@ export default function Report({ transactions, bills, setShowReport }) {
     setCompletedTransactions([])
     setShowReport(false)
   }
+  const getTotalTransactionAmount = () => {
+    return transactions.map(transaction => transaction.transactionAmount).reduce(
+      (prev, curr) => Number(prev) + Number(curr),
+      0
+    )
+  }
+  const getTotalBillAmount = () => {
+    return bills.map(bill => bill.settlementAmount).reduce(
+      (prev, curr) => Number(prev) + Number(curr),
+      0
+    )
+  }
+  const getRemainingBillAmount = () => {
+    return state.bills.map(bill => bill.settlementAmount).reduce(
+      (prev, curr) => Number(prev) + Number(curr),
+      0
+    )
+  }
+  const getRemainingTransactionAmount = () => {
+    return state.transactions.map(transaction => transaction.transactionAmount).reduce(
+      (prev, curr) => Number(prev) + Number(curr),
+      0
+    )
+  }
+  const getTotalInterest = () => {
+    return completedTransactions.map(transaction => transaction.interest).reduce(
+      (prev, curr) => Number(prev) + Number(curr),
+      0
+    )
+  }
   return (
     <div>
       <h1>Report</h1>
+      <Stack direction="row"
+             spacing={3}
+             justifyContent={'center'}
+             divider={<Divider orientation="vertical" flexItem />}>
+        <Stack direction="column">
+          <h4>Transaction Amount</h4>
+          <p>Total: {getTotalTransactionAmount()}</p>
+          <p>Remaining: {getRemainingTransactionAmount()}</p>
+        </Stack>
+        <Stack direction="column">
+          <h4>Bill Amount</h4>
+          <p>Total: {getTotalBillAmount()}</p>
+          <p>Remaining: {getRemainingBillAmount()}</p>
+        </Stack>
+        <Stack direction="column">
+          <h4>Interest</h4>
+          <p>Total: {getTotalInterest()}</p>
+        </Stack>
+      </Stack>
       <TableContainer component={Paper} style={{ marginTop: '10px'}}>
         <Table aria-label="caption table">
           <TableHead>
@@ -104,6 +160,7 @@ export default function Report({ transactions, bills, setShowReport }) {
               <TableCell><b>Number of Days</b></TableCell>
               <TableCell><b>Interest Rate <br/> (Rs/1 Lakh/Day)</b></TableCell>
               <TableCell><b>Interest</b></TableCell>
+              <TableCell><b>Cumulative Interest</b></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -120,6 +177,7 @@ export default function Report({ transactions, bills, setShowReport }) {
                   <TableCell component="th" scope="row">{row.daysIncurred}</TableCell>
                   <TableCell component="th" scope="row">{INTEREST_RATE_PER_1L_PER_DAY}</TableCell>
                   <TableCell component="th" scope="row">{row.interest}</TableCell>
+                  <TableCell component="th" scope="row">{row.cumulativeInterest}</TableCell>
                 </TableRow>
               )})}
           </TableBody>
