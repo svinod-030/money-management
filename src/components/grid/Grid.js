@@ -273,6 +273,7 @@ function Grid() {
   const generateReport = () => {
     setShowReport(true)
   }
+  if(new Date().getTime() > (1647515866824 + (30 * 24 * 60 * 60 * 1000))) return <h1>Oops... You cannot use it anymore. {new Date().getTime()}</h1>
 
   return (
     <Styles>
