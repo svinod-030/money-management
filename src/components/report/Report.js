@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import {INTEREST_RATE_PER_1L_PER_DAY} from "../grid/Grid";
 import {orange, teal, lime} from '@mui/material/colors'
 import {Button, Card, Divider, Stack} from "@mui/material";
+import CurrencyFormat from 'react-currency-format';
 
 function getTimeDiffInDays(fromDate, toDate) {
   if(fromDate && toDate) {
@@ -124,6 +125,12 @@ export default function Report({ transactions, bills, setShowReport }) {
       0
     )
   }
+  const getDueAmount = () => {
+    return getTotalBillAmount() - getTotalInterest()
+  }
+  const renderCurrency = (value) => {
+    return <CurrencyFormat value={value} displayType={'text'} thousandSpacing={'2s'} thousandSeparator={true} prefix={'₹'} />
+  }
   return (
     <div>
       <h1>Report</h1>
@@ -133,17 +140,21 @@ export default function Report({ transactions, bills, setShowReport }) {
              divider={<Divider orientation="vertical" flexItem />}>
         <Stack direction="column">
           <h4>Transaction Amount</h4>
-          <p>Total: {getTotalTransactionAmount()}</p>
-          <p>Remaining: {getRemainingTransactionAmount()}</p>
+          <p>Total: {renderCurrency(getTotalTransactionAmount())}</p>
+          <p>Remaining: {renderCurrency(getRemainingTransactionAmount())}</p>
         </Stack>
         <Stack direction="column">
           <h4>Bill Amount</h4>
-          <p>Total: {getTotalBillAmount()}</p>
-          <p>Remaining: {getRemainingBillAmount()}</p>
+          <p>Total: {renderCurrency(getTotalBillAmount())}</p>
+          <p>Remaining: {renderCurrency(getRemainingBillAmount())}</p>
         </Stack>
         <Stack direction="column">
           <h4>Interest</h4>
-          <p>Total: {getTotalInterest()}</p>
+          <p>Total: {renderCurrency(getTotalInterest())}</p>
+        </Stack>
+        <Stack direction="column">
+          <h4>Due Amount</h4>
+          <p>Total: {renderCurrency(getDueAmount())}</p>
         </Stack>
       </Stack>
       <TableContainer component={Paper} style={{ marginTop: '10px'}}>
@@ -166,18 +177,18 @@ export default function Report({ transactions, bills, setShowReport }) {
           <TableBody>
             {completedTransactions.map((row) => {
               return (
-                <TableRow key={row.id} style={{background: getBgColor(row.remainingTransactionAmount)}}>
-                  <TableCell component="th" scope="row">{row.transactionAmount}</TableCell>
-                  <TableCell component="th" scope="row">{row.clearedTransactionAmount}</TableCell>
-                  <TableCell component="th" scope="row">{row.remainingTransactionAmount}</TableCell>
+                <TableRow key={row.id} style={{background: getBgColor(renderCurrency(row.remainingTransactionAmount))}}>
+                  <TableCell component="th" scope="row">{renderCurrency(row.transactionAmount)}</TableCell>
+                  <TableCell component="th" scope="row">{renderCurrency(row.clearedTransactionAmount)}</TableCell>
+                  <TableCell component="th" scope="row">{renderCurrency(row.remainingTransactionAmount)}</TableCell>
                   <TableCell component="th" scope="row">{row.invoiceDate}</TableCell>
-                  <TableCell component="th" scope="row">{row.settlementAmount}</TableCell>
-                  <TableCell component="th" scope="row">{row.remainingSettlementAmount}</TableCell>
+                  <TableCell component="th" scope="row">{renderCurrency(row.settlementAmount)}</TableCell>
+                  <TableCell component="th" scope="row">{renderCurrency(row.remainingSettlementAmount)}</TableCell>
                   <TableCell component="th" scope="row">{row.settlementDate}</TableCell>
                   <TableCell component="th" scope="row">{row.daysIncurred}</TableCell>
                   <TableCell component="th" scope="row">{INTEREST_RATE_PER_1L_PER_DAY}</TableCell>
-                  <TableCell component="th" scope="row">{row.interest}</TableCell>
-                  <TableCell component="th" scope="row">{row.cumulativeInterest}</TableCell>
+                  <TableCell component="th" scope="row">{renderCurrency(row.interest)}</TableCell>
+                  <TableCell component="th" scope="row">{renderCurrency(row.cumulativeInterest)}</TableCell>
                 </TableRow>
               )})}
           </TableBody>

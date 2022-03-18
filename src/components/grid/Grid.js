@@ -4,6 +4,7 @@ import { usePagination, useTable } from 'react-table'
 import { Button, Stack } from '@mui/material'
 import Report from '../report/Report'
 import lot from '../../data/lot-1.json'
+import CurrencyFormat from 'react-currency-format';
 
 const makeTransactions = () => {
   return lot.transactions
